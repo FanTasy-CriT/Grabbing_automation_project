@@ -33,8 +33,8 @@ def account_creator(number, account_password,nickname1,realname,phonenumber1,cou
     loginnumber.send_keys(number)
     loginpassword = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/ul/li[2]/input')
     loginpassword.send_keys(account_password)
-    button = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/button')
-    button.click()
+    login = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/button')
+    login.click()
     wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="tanchuangClose"]'))).click()
     my = driver.find_element_by_xpath('/html/body/div/div/div[9]/ul/li[5]/div[1]')
     my.click()
@@ -57,3 +57,5 @@ def account_creator(number, account_password,nickname1,realname,phonenumber1,cou
     adress.send_keys(adress1)# generated an adress 
     savebutton = driver.find_element_by_xpath('/html/body/div/form/div/p')
     savebutton.click()
+    time.sleep(5)
+    driver.quit()
