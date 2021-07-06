@@ -1,38 +1,46 @@
-from account_maker import account_creator
-import random
-import os
 import time
-from adressgenerator import adressgen
-from fullnamegenerator import fullnamegen
-from nicknamegenerator import nicknamegen
-from passwordmaker1 import password_maker
+import random
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 from tor import renew_ip
-database = open(r'C:\Users\Fantasy-CriT\Documents\project\accounts.txt', 'a')
-database2 = open(r'C:\Users\Fantasy-CriT\Documents\project\accounts_details.txt',"a")
+import os
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-for i in range(49,9999):
-    temp =('{:04d}'.format(i))
-    number = str(temp)
-    phonenumber1= str(random.randint(10000000,99999999))
-    country1 = 'France' # might make it random later and enhace further
-    realname = str(fullnamegen())
-    adress1 = str(adressgen())
-    password= str(password_maker(15))
-    nickname1= str(nicknamegen())
-    try:
-        account_creator(number,password,nickname1,realname,phonenumber1,country1,adress1)
-        os.system('C:\Users\Fantasy-CriT\AppData\Roaming\tor\Tor\tor.exe')
-        renew_ip()
-    finally:
-        database2.write('\n')
-        database2.write(f'Nickname: {nickname1}\n')
-        database2.write(f'Real name: {realname}\n')
-        database2.write(f'Phone number: {phonenumber1}\n')
-        database2.write(f'Country: {country1}\n')
-        database2.write(f'Adress: {adress1}\n')
-        database2.write(f'Account number: {number}\n')
-        database2.write(f"Password: {password}\n")
-        database2.write('--------------------------------------------------------------------------------------------------------------------')
-        database.write(f'account number: {number}\n')
-        database.write(f"password: {password}\n")
-        database.write('--------------------------------------------------------------------------------------------------------------------')
+database = open(r'C:\Users\Fantasy-CriT\Documents\project\accounts.txt', 'r')
+database2 = open(r'C:\Users\Fantasy-CriT\Documents\project\accounts_details.txt',"r")
+driver = webdriver.Firefox(executable_path=r'C:\Users\Fantasy-CriT\Documents\geckodriver.exe')
+wait = WebDriverWait(driver,100)
+
+
+def grabbing_account(user,password):
+    driver.get("http://szt6688.com/index/user/login.html")
+    code = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/ul/li[1]/input')
+    code.click()
+    code.send_keys(user)
+    passwords = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/ul/li[2]/input')
+    passwords.click()
+    passwords.send_keys(password)
+    button = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/button')
+    button.click()
+    wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="tanchuangClose"]'))).click()
+    for i in range(6):
+        wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="orderDetail"]/div/div/div[3]/div[2]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="autoStart"]'))).click()
+    # driver.switch_to_default_content()  for switching back to main frame
+    time.sleep(5)
+    driver.quit()
+    os.system('C:\Users\Fantasy-CriT\AppData\Roaming\tor\Tor\tor.exe')
+    renew_ip()
+
+#opening every account one by one  and using it inside of this function
+
+for line in database:
+    if 'account number: ' in line:
+        number = line[line.find(" ",13):]
+        line1 =database.readline()
+        password =line1[line1.find(" ")+1:]
+        grabbing_account(number,password)
+
+
