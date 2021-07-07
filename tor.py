@@ -1,8 +1,6 @@
 from stem.control import Controller
 from stem import Signal
 import requests
-import json
-from pprint import pprint
 def renew_ip():
     session = requests.session()
     string =session.get('https://httpbin.org/ip').text
