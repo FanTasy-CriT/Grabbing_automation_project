@@ -7,12 +7,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 
-
-driver = webdriver.Firefox(executable_path=r'C:\Users\Fantasy-CriT\Documents\geckodriver.exe')
-wait = WebDriverWait(driver,100)
-wait1 = WebDriverWait(driver,20)
-
 def account_creator(number, account_password,nickname1,realname,phonenumber1,country1,adress1):
+    driver = webdriver.Firefox(executable_path=r'C:\Users\Fantasy-CriT\Documents\geckodriver.exe')
+    wait = WebDriverWait(driver,100)
+    wait1 = WebDriverWait(driver,20)
     driver.get('http://szt6688.com/index/user/register/invite_code/928174.html') #invite link
     nickname = driver.find_element_by_xpath('//*[@id="forgetpwd-form"]/ul/li[1]/input')
     nickname.click()
@@ -28,14 +26,15 @@ def account_creator(number, account_password,nickname1,realname,phonenumber1,cou
     password2.send_keys(account_password)
     register_button = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/form/div[2]/button')
     register_button.click()
-    wait.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[1]/div/div[2]/ul/li[1]/input'))).click()
+    wait1.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[1]/div/div[2]/ul/li[1]/input'))).click()
     loginnumber= driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/ul/li[1]/input')
     loginnumber.send_keys(number)
     loginpassword = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/ul/li[2]/input')
     loginpassword.send_keys(account_password)
-    login = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/button')
+    login = driver.find_element_by_xpath(('/html/body/div[1]/div/div[2]/div[1]/button'))
     login.click()
-    wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="tanchuangClose"]'))).click()
+    wait1.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="tanchuangClose"]'))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div[9]/ul/li[5]/div[1]')))
     my = driver.find_element_by_xpath('/html/body/div/div/div[9]/ul/li[5]/div[1]')
     my.click()
     wait.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/ul/li[1]/a/p'))).click()
@@ -57,5 +56,4 @@ def account_creator(number, account_password,nickname1,realname,phonenumber1,cou
     adress.send_keys(adress1)# generated an adress 
     savebutton = driver.find_element_by_xpath('/html/body/div/form/div/p')
     savebutton.click()
-    time.sleep(5)
-    driver.quit()
+    time.sleep(10)
